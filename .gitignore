@@ -1,0 +1,15 @@
+target/
+output/
+bin/
+logs/
+.settings/
+.bpmn/
+.project
+.classpath
+
+
+dependency-reduced-pom.xml
+
+.factorypath
+.idea/
+*.iml

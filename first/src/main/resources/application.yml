@@ -1,0 +1,21 @@
+server:
+  port: 8080
+  context-path: /first
+
+spring:
+  activiti:
+    database-schema-update: true
+#    history-level: full
+#    db-history-used: true
+#    check-process-definitions: false # 自动部署验证设置:true-开启（默认）、false-关闭
+  datasource:
+    url: jdbc:mysql://node-1:3306/act-6?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC&nullCatalogMeansCurrent=true
+    username: root
+    password: 888888
+    driver-class-name: com.mysql.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    initialization-mode: always
+
+#swagger:
+#  enabled: true
+
