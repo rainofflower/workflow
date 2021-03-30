@@ -4,14 +4,14 @@ server:
 
 spring:
   activiti:
-    database-schema-update: true
-#    history-level: full
+    database-schema-update: drop-create
+#    history-level: audit
 #    db-history-used: true
 #    check-process-definitions: false # 自动部署验证设置:true-开启（默认）、false-关闭
   datasource:
-    url: jdbc:mysql://node-1:3306/act-6?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC&nullCatalogMeansCurrent=true
+    url: jdbc:mysql://node-1:3306/act_6?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC&nullCatalogMeansCurrent=true
     username: root
-    password: 888888
+    password: 123456
     driver-class-name: com.mysql.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
     initialization-mode: always

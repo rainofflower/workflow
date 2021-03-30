@@ -1,6 +1,8 @@
 package com.rainofflower.learn.workflow;
 
+import org.activiti.engine.DynamicBpmnService;
 import org.activiti.engine.ProcessEngine;
+import org.activiti.engine.ProcessEngineConfiguration;
 import org.activiti.engine.ProcessEngines;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
@@ -14,16 +16,26 @@ import org.activiti.engine.task.Task;
 public class First {
 	public static void main(String[] args)  {
 		// 创建流程引擎
-		ProcessEngine engine = ProcessEngines.getDefaultProcessEngine();
+		//ProcessEngine engine = ProcessEngines.getDefaultProcessEngine();
+		ProcessEngineConfiguration config = ProcessEngineConfiguration.createProcessEngineConfigurationFromResource("activiti.cfg.qa.xml");
+		ProcessEngine engine = config.buildProcessEngine();
+
 		// 得到流程存储服务组件
 		RepositoryService repositoryService = engine.getRepositoryService();
 		// 得到运行时服务组件
 		RuntimeService runtimeService = engine.getRuntimeService();
 		// 获取流程任务组件
 		TaskService taskService = engine.getTaskService();
+
+		DynamicBpmnService dynamicBpmnService = engine.getDynamicBpmnService();
+
 		// 部署流程文件
+		/*repositoryService.createDeployment()
+				.addClasspathResource("processes/test1.bpmn").deploy();*/
+
 		repositoryService.createDeployment()
-				.addClasspathResource("processes/test1.bpmn").deploy();
+				.addClasspathResource("processes/test2.bpmn").deploy();
+
 		// 启动流程--key要和已部署的某个流程的id相同
 		runtimeService.startProcessInstanceByKey("myProcess");
 		// 查询第一个任务
