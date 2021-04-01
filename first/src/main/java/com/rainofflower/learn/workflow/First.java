@@ -7,11 +7,16 @@ import org.activiti.engine.ProcessEngines;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
+import org.activiti.engine.repository.Deployment;
+import org.activiti.engine.runtime.Execution;
+import org.activiti.engine.runtime.ExecutionQuery;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 import org.junit.Test;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 第一个流程运行类
@@ -91,5 +96,86 @@ public class First {
 		Task task = taskService.createTaskQuery().processInstanceId(processInstanceId).singleResult();
 		System.out.println("任务："+task.getName());
 		taskService.complete(task.getId());
+	}
+
+    @Test
+    public void testReceiveTask(){
+        ProcessEngineConfiguration config = ProcessEngineConfiguration.createProcessEngineConfigurationFromResource("activiti.cfg.qa.xml");
+        ProcessEngine engine = config.buildProcessEngine();
+
+        // 得到流程存储服务组件
+        RepositoryService repositoryService = engine.getRepositoryService();
+        // 得到运行时服务组件
+        RuntimeService runtimeService = engine.getRuntimeService();
+        // 获取流程任务组件
+        TaskService taskService = engine.getTaskService();
+
+        DynamicBpmnService dynamicBpmnService = engine.getDynamicBpmnService();
+
+        // 部署流程文件
+		/*repositoryService.createDeployment()
+				.addClasspathResource("processes/receiveTask.bpmn").deploy();*/
+        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("receiveTask","20210300");
+        String processInstanceId = processInstance.getId();
+//		String processInstanceId = "35005";
+        System.out.println("流程实例id"+processInstanceId);
+        Execution exe = runtimeService.createExecutionQuery().activityId("receivetask1").singleResult();
+        System.out.println("当前流程节点："+exe.getName());
+        runtimeService.trigger(exe.getId());
+        Task task = taskService.createTaskQuery().processInstanceId(processInstanceId).singleResult();
+        System.out.println("任务："+task.getName());
+        taskService.complete(task.getId());
+    }
+
+    @Test
+    public void testTimerTask() throws InterruptedException {
+        ProcessEngineConfiguration config = ProcessEngineConfiguration.createProcessEngineConfigurationFromResource("activiti.cfg.qa.xml");
+        ProcessEngine engine = config.buildProcessEngine();
+
+        // 得到流程存储服务组件
+        RepositoryService repositoryService = engine.getRepositoryService();
+        // 得到运行时服务组件
+        RuntimeService runtimeService = engine.getRuntimeService();
+        // 获取流程任务组件
+        TaskService taskService = engine.getTaskService();
+
+        DynamicBpmnService dynamicBpmnService = engine.getDynamicBpmnService();
+
+        // 部署流程文件
+        repositoryService.createDeployment()
+                .addClasspathResource("processes/timer1.bpmn").deploy();
+//        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("timer","20210300");
+//        System.out.println(processInstance.getName());
+        Thread.sleep(120 * 1000);
+        List<ProcessInstance> list = runtimeService.createProcessInstanceQuery().list();
+        System.out.println(list);
+    }
+
+	@Test
+	public void testSubProcess() throws InterruptedException {
+		ProcessEngineConfiguration config = ProcessEngineConfiguration.createProcessEngineConfigurationFromResource("activiti.cfg.qa.xml");
+		ProcessEngine engine = config.buildProcessEngine();
+
+		// 得到流程存储服务组件
+		RepositoryService repositoryService = engine.getRepositoryService();
+		// 得到运行时服务组件
+		RuntimeService runtimeService = engine.getRuntimeService();
+		// 获取流程任务组件
+		TaskService taskService = engine.getTaskService();
+
+		DynamicBpmnService dynamicBpmnService = engine.getDynamicBpmnService();
+
+		// 部署流程文件
+		repositoryService.createDeployment()
+				.addClasspathResource("processes/subprocess.bpmn").deploy();
+        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("subprocess","20210300");
+		Task subTask = taskService.createTaskQuery().singleResult();
+		Map<String, Object> vars = new HashMap<>();
+		vars.put("success","false");
+		taskService.complete(subTask.getId(), vars);
+		List<Task> tasks = taskService.createTaskQuery().list();
+		for (Task task : tasks) {
+			System.out.println(task.getName());
+		}
 	}
 }

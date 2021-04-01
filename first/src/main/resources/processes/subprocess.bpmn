@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:tns="http://www.activiti.org/test" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" expressionLanguage="http://www.w3.org/1999/XPath" id="m1617102731309" name="" targetNamespace="http://www.activiti.org/test" typeLanguage="http://www.w3.org/2001/XMLSchema">
+  <process id="subprocess" isClosed="false" isExecutable="true" name="subprocess" processType="None">
+    <startEvent id="startevent1" name="Start"/>
+    <userTask activiti:exclusive="true" id="success-task" name="success-task"/>
+    <endEvent id="endevent1" name="End"/>
+    <sequenceFlow id="flow2" sourceRef="success-task" targetRef="endevent1"/>
+    <subProcess activiti:exclusive="true" id="subprocess1" name="Sub Process" triggeredByEvent="false">
+      <startEvent id="startevent2" name="Start"/>
+      <userTask activiti:exclusive="true" id="usertask1" name="sub task"/>
+      <sequenceFlow id="flow4" sourceRef="startevent2" targetRef="usertask1"/>
+      <exclusiveGateway gatewayDirection="Unspecified" id="exclusivegateway1" name="Exclusive Gateway"/>
+      <sequenceFlow id="flow5" sourceRef="usertask1" targetRef="exclusivegateway1"/>
+      <endEvent id="endevent2" name="End"/>
+      <endEvent id="errorendevent1" name="ErrorEnd">
+        <errorEventDefinition id="errorendevent1_ED_1"/>
+      </endEvent>
+      <sequenceFlow id="flow6" sourceRef="exclusivegateway1" targetRef="errorendevent1">
+        <conditionExpression xsi:type="tFormalExpression"><![CDATA[${success==false}]]></conditionExpression>
+      </sequenceFlow>
+      <sequenceFlow id="flow7" sourceRef="exclusivegateway1" targetRef="endevent2">
+        <conditionExpression xsi:type="tFormalExpression"><![CDATA[${success==true}]]></conditionExpression>
+      </sequenceFlow>
+    </subProcess>
+    <sequenceFlow id="flow3" sourceRef="startevent1" targetRef="subprocess1"/>
+    <sequenceFlow id="flow8" sourceRef="subprocess1" targetRef="success-task"/>
+    <userTask activiti:exclusive="true" id="error-task" name="error-task"/>
+    <boundaryEvent attachedToRef="subprocess1" cancelActivity="true" id="boundaryerror1" name="Error">
+      <errorEventDefinition id="boundaryerror1_ED_1"/>
+    </boundaryEvent>
+    <sequenceFlow id="flow9" sourceRef="boundaryerror1" targetRef="error-task"/>
+  </process>
+  <bpmndi:BPMNDiagram documentation="background=#3C3F41;count=2;horizontalcount=1;orientation=0;width=842.4;height=1195.2;imageableWidth=832.4;imageableHeight=1185.2;imageableX=5.0;imageableY=5.0" id="Diagram-_1" name="New Diagram">
+    <bpmndi:BPMNPlane bpmnElement="subprocess">
+      <bpmndi:BPMNShape bpmnElement="startevent1" id="Shape-startevent1">
+        <omgdc:Bounds height="32.0" width="32.0" x="394.0" y="151.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="32.0" width="32.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="success-task" id="Shape-success-task">
+        <omgdc:Bounds height="55.0" width="105.0" x="363.0" y="911.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="55.0" width="105.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="endevent1" id="Shape-endevent1">
+        <omgdc:Bounds height="32.0" width="32.0" x="398.0" y="1100.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="32.0" width="32.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="subprocess1" id="Shape-subprocess1" isExpanded="true">
+        <omgdc:Bounds height="441.0" width="311.0" x="260.0" y="300.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="441.0" width="311.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="error-task" id="Shape-error-task">
+        <omgdc:Bounds height="55.0" width="105.0" x="80.0" y="686.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="55.0" width="105.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="startevent2" id="Shape-startevent2">
+        <omgdc:Bounds height="32.0" width="32.0" x="385.0" y="340.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="32.0" width="32.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="usertask1" id="Shape-usertask1">
+        <omgdc:Bounds height="55.0" width="105.0" x="350.0" y="414.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="55.0" width="105.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="exclusivegateway1" id="Shape-exclusivegateway1" isMarkerVisible="false">
+        <omgdc:Bounds height="32.0" width="32.0" x="382.0" y="530.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="32.0" width="32.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="endevent2" id="Shape-endevent2">
+        <omgdc:Bounds height="32.0" width="32.0" x="316.0" y="630.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="32.0" width="32.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="errorendevent1" id="Shape-errorendevent1">
+        <omgdc:Bounds height="32.0" width="32.0" x="460.0" y="630.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="32.0" width="32.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="boundaryerror1" id="Shape-boundaryerror1">
+        <omgdc:Bounds height="32.0" width="32.0" x="240.0" y="506.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="0.0" width="0.0" x="-20.0" y="206.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow2" id="BPMNEdge_flow2" sourceElement="success-task" targetElement="endevent1">
+        <omgdi:waypoint x="414.0" y="966.0"/>
+        <omgdi:waypoint x="414.0" y="1100.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="-1.0" width="-1.0" x="-1.0" y="-1.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow3" id="BPMNEdge_flow3" sourceElement="startevent1" targetElement="subprocess1">
+        <omgdi:waypoint x="410.0" y="183.0"/>
+        <omgdi:waypoint x="410.0" y="300.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="-1.0" width="-1.0" x="-1.0" y="-1.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow4" id="BPMNEdge_flow4" sourceElement="startevent2" targetElement="usertask1">
+        <omgdi:waypoint x="401.0" y="372.0"/>
+        <omgdi:waypoint x="401.0" y="414.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="-1.0" width="-1.0" x="-1.0" y="-1.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow5" id="BPMNEdge_flow5" sourceElement="usertask1" targetElement="exclusivegateway1">
+        <omgdi:waypoint x="398.0" y="469.0"/>
+        <omgdi:waypoint x="398.0" y="530.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="-1.0" width="-1.0" x="-1.0" y="-1.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow6" id="BPMNEdge_flow6" sourceElement="exclusivegateway1" targetElement="errorendevent1">
+        <omgdi:waypoint x="414.0" y="546.0"/>
+        <omgdi:waypoint x="460.0" y="646.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="-1.0" width="-1.0" x="-1.0" y="-1.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow7" id="BPMNEdge_flow7" sourceElement="exclusivegateway1" targetElement="endevent2">
+        <omgdi:waypoint x="382.0" y="546.0"/>
+        <omgdi:waypoint x="348.0" y="646.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="-1.0" width="-1.0" x="-1.0" y="-1.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow8" id="BPMNEdge_flow8" sourceElement="subprocess1" targetElement="success-task">
+        <omgdi:waypoint x="415.5" y="741.0"/>
+        <omgdi:waypoint x="415.5" y="911.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="-1.0" width="-1.0" x="-1.0" y="-1.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow9" id="BPMNEdge_flow9" sourceElement="boundaryerror1" targetElement="error-task">
+        <omgdi:waypoint x="240.0" y="522.0"/>
+        <omgdi:waypoint x="185.0" y="713.5"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="-1.0" width="-1.0" x="-1.0" y="-1.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>
