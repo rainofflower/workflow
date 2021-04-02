@@ -178,4 +178,41 @@ public class First {
 			System.out.println(task.getName());
 		}
 	}
+
+	@Test
+	public void testCallAct() throws InterruptedException {
+		ProcessEngineConfiguration config = ProcessEngineConfiguration.createProcessEngineConfigurationFromResource("activiti.cfg.qa.xml");
+		ProcessEngine engine = config.buildProcessEngine();
+
+		// 得到流程存储服务组件
+		RepositoryService repositoryService = engine.getRepositoryService();
+		// 得到运行时服务组件
+		RuntimeService runtimeService = engine.getRuntimeService();
+		// 获取流程任务组件
+		TaskService taskService = engine.getTaskService();
+
+		DynamicBpmnService dynamicBpmnService = engine.getDynamicBpmnService();
+
+		// 部署流程文件
+		repositoryService.createDeployment()
+				.addClasspathResource("processes/callActivity.bpmn")
+				.addClasspathResource("processes/test1.bpmn")
+				.deploy();
+		ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("callActivityTest","20210300");
+		Task task = taskService.createTaskQuery().processInstanceId(processInstance.getId()).singleResult();
+		System.out.println("流程节点："+task.getName());
+		taskService.complete(task.getId());
+		List<ProcessInstance> list = runtimeService.createProcessInstanceQuery().list();
+		System.out.println("当前流程实例数："+list.size());
+		List<Execution> executions = runtimeService.createExecutionQuery().list();
+		System.out.println("当前执行流数："+executions.size());
+		task = taskService.createTaskQuery().singleResult();
+		System.out.println("流程节点:"+task.getName());
+		taskService.complete(task.getId());
+		task = taskService.createTaskQuery().singleResult();
+		System.out.println("流程节点:"+task.getName());
+		taskService.complete(task.getId());
+		List<Execution> executions2 = runtimeService.createExecutionQuery().list();
+		System.out.println("当前执行流数："+executions2.size());
+	}
 }
