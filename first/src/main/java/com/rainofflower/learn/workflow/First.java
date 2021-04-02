@@ -215,4 +215,32 @@ public class First {
 		List<Execution> executions2 = runtimeService.createExecutionQuery().list();
 		System.out.println("当前执行流数："+executions2.size());
 	}
+
+	@Test
+	public void testDynamicCallAct() throws InterruptedException {
+		ProcessEngineConfiguration config = ProcessEngineConfiguration.createProcessEngineConfigurationFromResource("activiti.cfg.qa.xml");
+		ProcessEngine engine = config.buildProcessEngine();
+
+		// 得到流程存储服务组件
+		RepositoryService repositoryService = engine.getRepositoryService();
+		// 得到运行时服务组件
+		RuntimeService runtimeService = engine.getRuntimeService();
+		// 获取流程任务组件
+		TaskService taskService = engine.getTaskService();
+
+		DynamicBpmnService dynamicBpmnService = engine.getDynamicBpmnService();
+
+		// 部署流程文件
+		/*repositoryService.createDeployment()
+				.addClasspathResource("processes/dynamicCallActivity.bpmn")
+				.addClasspathResource("processes/sub1.bpmn")
+				.addClasspathResource("processes/sub2.bpmn")
+				.deploy();*/
+		ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("dynamicCallActivityTest","20210401");
+		Task task = taskService.createTaskQuery().processInstanceId(processInstance.getId()).singleResult();
+		System.out.println("流程节点："+task.getName());
+		Map<String, Object> vars = new HashMap<>();
+		vars.put("targetSubProcess","sub2");
+		taskService.complete(task.getId(),vars);
+	}
 }

@@ -8,14 +8,14 @@ import org.activiti.engine.delegate.JavaDelegate;
  *
  * @author yanghui
  **/
-public class ServiceTask1 implements JavaDelegate {
+public class ServiceTask2 implements JavaDelegate {
 
     @Override
     public void execute(DelegateExecution execution) {
-        System.out.println("--task1--执行服务任务："+execution.getProcessInstanceId() + ":"+
+        System.out.println("--task2--执行服务任务："+execution.getProcessInstanceId() + ":"+
                 execution.getProcessInstanceBusinessKey() + "--父流程参数--"+
                         execution.getParent().getProcessInstanceId() + ":" +
                         execution.getParent().getProcessInstanceBusinessKey()
-        );
+                );
     }
 }
