@@ -231,16 +231,18 @@ public class First {
 		DynamicBpmnService dynamicBpmnService = engine.getDynamicBpmnService();
 
 		// 部署流程文件
-		/*repositoryService.createDeployment()
-				.addClasspathResource("processes/dynamicCallActivity.bpmn")
-				.addClasspathResource("processes/sub1.bpmn")
-				.addClasspathResource("processes/sub2.bpmn")
-				.deploy();*/
+		repositoryService.createDeployment()
+//				.addClasspathResource("processes/dynamicCallActivity.bpmn")
+//				.addClasspathResource("processes/sub1.bpmn")
+//				.addClasspathResource("processes/sub2.bpmn")
+				.addClasspathResource("processes/defaultSub.bpmn")
+				.deploy();
 		ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("dynamicCallActivityTest","20210401");
 		Task task = taskService.createTaskQuery().processInstanceId(processInstance.getId()).singleResult();
 		System.out.println("流程节点："+task.getName());
 		Map<String, Object> vars = new HashMap<>();
-		vars.put("targetSubProcess","sub2");
+		vars.put("targetSubProcess","defaultSub");
 		taskService.complete(task.getId(),vars);
+//		taskService.complete(task.getId());
 	}
 }
