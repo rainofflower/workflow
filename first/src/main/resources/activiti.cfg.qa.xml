@@ -5,10 +5,10 @@
     <!-- 流程引擎配置的bean -->
     <bean id="processEngineConfiguration"
           class="org.activiti.engine.impl.cfg.StandaloneProcessEngineConfiguration">
-        <property name="jdbcUrl" value="jdbc:mysql://172.16.87.26:3390/act_6" />
+        <property name="jdbcUrl" value="jdbc:mysql://172.16.87.26:3390/act_5" />
         <property name="jdbcDriver" value="com.mysql.jdbc.Driver" />
         <property name="jdbcUsername" value="root" />
         <property name="jdbcPassword" value="123456" />
-        <property name="databaseSchemaUpdate" value="true" />
+        <property name="databaseSchemaUpdate" value="drop-create" />
     </bean>
 </beans>

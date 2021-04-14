@@ -8,7 +8,6 @@
     <receiveTask id="receivetask1" name="Receive Task"></receiveTask>
     <sequenceFlow id="flow3" sourceRef="startevent1" targetRef="receivetask1"></sequenceFlow>
     <sequenceFlow id="flow4" sourceRef="receivetask1" targetRef="simple-task"></sequenceFlow>
-    <serviceTask id="servicetask1" name="Service Task" activiti:async="true" activiti:delegateExpression="${drawExecRuleTask}"></serviceTask>
   </process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_receiveTask">
     <bpmndi:BPMNPlane bpmnElement="receiveTask" id="BPMNPlane_receiveTask">
@@ -23,9 +22,6 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="receivetask1" id="BPMNShape_receivetask1">
         <omgdc:Bounds height="55.0" width="105.0" x="310.0" y="410.0"></omgdc:Bounds>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape bpmnElement="servicetask1" id="BPMNShape_servicetask1">
-        <omgdc:Bounds height="55.0" width="105.0" x="720.0" y="480.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge bpmnElement="flow2" id="BPMNEdge_flow2">
         <omgdi:waypoint x="362.0" y="615.0"></omgdi:waypoint>

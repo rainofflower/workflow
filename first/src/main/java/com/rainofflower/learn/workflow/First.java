@@ -1,5 +1,6 @@
 package com.rainofflower.learn.workflow;
 
+import com.rainofflower.learn.workflow.constant.WorkFlowConstants;
 import org.activiti.engine.DynamicBpmnService;
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.ProcessEngineConfiguration;
@@ -41,8 +42,8 @@ public class First {
 		DynamicBpmnService dynamicBpmnService = engine.getDynamicBpmnService();
 
 		// 部署流程文件
-		/*repositoryService.createDeployment()
-				.addClasspathResource("processes/test1.bpmn").deploy();*/
+		repositoryService.createDeployment()
+				.addClasspathResource("processes/test1.bpmn").deploy();
 
 		/*repositoryService.createDeployment()
 				.addClasspathResource("processes/test2.bpmn").deploy();*/
@@ -113,15 +114,15 @@ public class First {
         DynamicBpmnService dynamicBpmnService = engine.getDynamicBpmnService();
 
         // 部署流程文件
-		/*repositoryService.createDeployment()
-				.addClasspathResource("processes/receiveTask.bpmn").deploy();*/
+		repositoryService.createDeployment()
+				.addClasspathResource("processes/receiveTask.bpmn").deploy();
         ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("receiveTask","20210300");
         String processInstanceId = processInstance.getId();
 //		String processInstanceId = "35005";
         System.out.println("流程实例id"+processInstanceId);
         Execution exe = runtimeService.createExecutionQuery().activityId("receivetask1").singleResult();
         System.out.println("当前流程节点："+exe.getName());
-        runtimeService.trigger(exe.getId());
+        runtimeService.signal(exe.getId());
         Task task = taskService.createTaskQuery().processInstanceId(processInstanceId).singleResult();
         System.out.println("任务："+task.getName());
         taskService.complete(task.getId());
@@ -231,18 +232,21 @@ public class First {
 		DynamicBpmnService dynamicBpmnService = engine.getDynamicBpmnService();
 
 		// 部署流程文件
-		repositoryService.createDeployment()
-//				.addClasspathResource("processes/dynamicCallActivity.bpmn")
-//				.addClasspathResource("processes/sub1.bpmn")
-//				.addClasspathResource("processes/sub2.bpmn")
+		/*repositoryService.createDeployment()
+				.addClasspathResource("processes/dynamicCallActivity.bpmn")
+				.addClasspathResource("processes/sub1.bpmn")
+				.addClasspathResource("processes/sub2.bpmn")
 				.addClasspathResource("processes/defaultSub.bpmn")
 				.deploy();
-		ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("dynamicCallActivityTest","20210401");
+		String businessKey = "20210409";
+		Map<String, Object> initVars = new HashMap<>();
+		initVars.put(WorkFlowConstants.BUSINESS_KEY, businessKey);
+		ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("dynamicCallActivityTest", businessKey, initVars);
 		Task task = taskService.createTaskQuery().processInstanceId(processInstance.getId()).singleResult();
 		System.out.println("流程节点："+task.getName());
 		Map<String, Object> vars = new HashMap<>();
-		vars.put("targetSubProcess","defaultSub");
-		taskService.complete(task.getId(),vars);
+		vars.put("targetSubProcess","sub1");
+		taskService.complete(task.getId(),vars);*/
 //		taskService.complete(task.getId());
 	}
 }
