@@ -5,8 +5,7 @@
     <userTask id="submit-apply" name="填写申请"></userTask>
     <endEvent id="endevent1" name="End"></endEvent>
     <sequenceFlow id="flow1" sourceRef="startevent1" targetRef="submit-apply"></sequenceFlow>
-    <callActivity id="subprocess1" name="子流程" calledElement="${targetSubProcess}" activiti:inheritVariables="true">
-    </callActivity>
+    <callActivity id="subprocess1" name="子流程" calledElement="${targetSubProcess}"></callActivity>
     <sequenceFlow id="flow2" sourceRef="submit-apply" targetRef="subprocess1"></sequenceFlow>
     <serviceTask id="servicetask1" name="Service Task" activiti:async="true" activiti:class="com.rainofflower.learn.workflow.task.ServiceTask1"></serviceTask>
     <sequenceFlow id="flow3" sourceRef="subprocess1" targetRef="servicetask1"></sequenceFlow>

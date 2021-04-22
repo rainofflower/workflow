@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.jboss.org/drools" id="Definition" targetNamespace="http://www.jboss.org/drools" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd">
+    <process id="ams-astAudit" name="资产审核流程  " processType="Private" isExecutable="true" tns:packageName="defaultPackage">
+        <userTask id="usr_riskFstCheck" name="风控资产初审" activiti:formKey="welcome.checkMixAssetFirst">
+            <extensionElements>
+                <activiti:assignToOrigin value="true" />
+                <activiti:applyStatus value="审核中" />
+                <activiti:role value="RS365" />
+            </extensionElements>
+            <incoming>SequenceFlow_0lvrz5s</incoming>
+            <incoming>SequenceFlow_19x1wrc</incoming>
+            <incoming>SequenceFlow_083oevm</incoming>
+            <outgoing>SequenceFlow_0gqvzh8</outgoing>
+        </userTask>
+        <userTask id="usr_riskSndCheck" name="风控资产复审" activiti:formKey="welcome.checkMixAssetAgain">
+            <extensionElements>
+                <activiti:assignToOrigin value="true" />
+                <activiti:applyStatus value="审核中" />
+                <activiti:role value="RS365" />
+            </extensionElements>
+            <incoming>SequenceFlow_0uq1ci2</incoming>
+            <incoming>SequenceFlow_02orzvm</incoming>
+            <incoming>SequenceFlow_1jbg3y8</incoming>
+            <outgoing>SequenceFlow_0ksons1</outgoing>
+        </userTask>
+        <exclusiveGateway id="exclusivegateway3">
+            <incoming>SequenceFlow_0ksons1</incoming>
+            <outgoing>SequenceFlow_0ogeb9a</outgoing>
+            <outgoing>SequenceFlow_08xmeqw</outgoing>
+            <outgoing>SequenceFlow_083oevm</outgoing>
+            <outgoing>SequenceFlow_1nyq1gs</outgoing>
+        </exclusiveGateway>
+        <startEvent id="startevent1" name="Start">
+            <outgoing>SequenceFlow_1i5kv75</outgoing>
+        </startEvent>
+        <userTask id="usr_materialcheck" name="资产查验" activiti:formKey="welcome.infocheck">
+            <extensionElements>
+                <activiti:assignToOrigin value="true" />
+                <activiti:applyStatus value="资料整理" />
+                <activiti:role value="RS365" />
+            </extensionElements>
+            <incoming>SequenceFlow_08xmeqw</incoming>
+            <incoming>SequenceFlow_029p14t</incoming>
+            <incoming>SequenceFlow_0viwh84</incoming>
+            <outgoing>SequenceFlow_1onwsc8</outgoing>
+        </userTask>
+        <exclusiveGateway id="exclusivegateway10">
+            <incoming>SequenceFlow_1onwsc8</incoming>
+            <outgoing>SequenceFlow_15devhf</outgoing>
+            <outgoing>SequenceFlow_089v1u9</outgoing>
+            <outgoing>SequenceFlow_0lvrz5s</outgoing>
+            <outgoing>SequenceFlow_0uq1ci2</outgoing>
+        </exclusiveGateway>
+        <endEvent id="endevent1" name="End">
+            <extensionElements>
+                <activiti:applyStatus value="审核通过" />
+            </extensionElements>
+            <incoming>SequenceFlow_1nyq1gs</incoming>
+        </endEvent>
+        <exclusiveGateway id="exclusivegateway14">
+            <incoming>SequenceFlow_0gqvzh8</incoming>
+            <outgoing>SequenceFlow_16f3rgy</outgoing>
+            <outgoing>SequenceFlow_029p14t</outgoing>
+            <outgoing>SequenceFlow_1jbg3y8</outgoing>
+        </exclusiveGateway>
+        <endEvent id="endevent2" name="End">
+            <extensionElements>
+                <activiti:applyStatus value="审核拒绝" />
+            </extensionElements>
+            <incoming>SequenceFlow_1i3636g</incoming>
+        </endEvent>
+        <endEvent id="endevent3" name="End">
+            <extensionElements>
+                <activiti:applyStatus value="审核拒绝" />
+            </extensionElements>
+            <incoming>SequenceFlow_089v1u9</incoming>
+        </endEvent>
+        <sequenceFlow id="SequenceFlow_1lp7v72" name="退回客户" sourceRef="ExclusiveGateway_0lqv2ej" targetRef="usr_materialinput">
+            <conditionExpression xsi:type="tFormalExpression">${rtfState=='退回客户'}</conditionExpression>
+        </sequenceFlow>
+        <sequenceFlow id="SequenceFlow_16f3rgy" name="退回资料整理" sourceRef="exclusivegateway14" targetRef="usr_materialinput">
+            <conditionExpression xsi:type="tFormalExpression">${rtfState=='退回资料整理'}</conditionExpression>
+        </sequenceFlow>
+        <sequenceFlow id="SequenceFlow_1i3636g" name="拒绝" sourceRef="ExclusiveGateway_0lqv2ej" targetRef="endevent2">
+            <conditionExpression xsi:type="tFormalExpression">${rtfState=='拒绝'}</conditionExpression>
+        </sequenceFlow>
+        <sequenceFlow id="SequenceFlow_15devhf" name="退回资料整理" sourceRef="exclusivegateway10" targetRef="usr_materialinput">
+            <conditionExpression xsi:type="tFormalExpression">${rtfState=='退回资料整理'}</conditionExpression>
+        </sequenceFlow>
+        <sequenceFlow id="SequenceFlow_0ogeb9a" name="退回资料整理" sourceRef="exclusivegateway3" targetRef="usr_materialinput">
+            <conditionExpression xsi:type="tFormalExpression">${rtfState=='退回资料整理'}</conditionExpression>
+        </sequenceFlow>
+        <sequenceFlow id="SequenceFlow_08xmeqw" name="退回资产查验" sourceRef="exclusivegateway3" targetRef="usr_materialcheck">
+            <conditionExpression xsi:type="tFormalExpression">${rtfState=='退回资产查验'}</conditionExpression>
+        </sequenceFlow>
+        <sequenceFlow id="SequenceFlow_089v1u9" name="拒绝" sourceRef="exclusivegateway10" targetRef="endevent3">
+            <conditionExpression xsi:type="tFormalExpression">${rtfState=='拒绝'}</conditionExpression>
+        </sequenceFlow>
+        <sequenceFlow id="SequenceFlow_0lvrz5s" name="通过" sourceRef="exclusivegateway10" targetRef="usr_riskFstCheck">
+            <conditionExpression xsi:type="tFormalExpression">${rtfState=='通过'}</conditionExpression>
+        </sequenceFlow>
+        <sequenceFlow id="SequenceFlow_0uq1ci2" name="提交风控复审" sourceRef="exclusivegateway10" targetRef="usr_riskSndCheck">
+            <conditionExpression xsi:type="tFormalExpression">${rtfState=='提交风控复审'}</conditionExpression>
+        </sequenceFlow>
+        <sequenceFlow id="SequenceFlow_0ksons1" sourceRef="usr_riskSndCheck" targetRef="exclusivegateway3" />
+        <sequenceFlow id="SequenceFlow_02orzvm" name="提交风控复审" sourceRef="ExclusiveGateway_0lqv2ej" targetRef="usr_riskSndCheck">
+            <conditionExpression xsi:type="tFormalExpression">${rtfState=='提交风控复审'}</conditionExpression>
+        </sequenceFlow>
+        <sequenceFlow id="SequenceFlow_19x1wrc" name="提交风控初审" sourceRef="ExclusiveGateway_0lqv2ej" targetRef="usr_riskFstCheck">
+            <conditionExpression xsi:type="tFormalExpression">${rtfState=='提交风控初审'}</conditionExpression>
+        </sequenceFlow>
+        <sequenceFlow id="SequenceFlow_029p14t" name="退回资产查验" sourceRef="exclusivegateway14" targetRef="usr_materialcheck">
+            <conditionExpression xsi:type="tFormalExpression">${rtfState=='退回资产查验'}</conditionExpression>
+        </sequenceFlow>
+        <sequenceFlow id="SequenceFlow_0gqvzh8" sourceRef="usr_riskFstCheck" targetRef="exclusivegateway14" />
+        <sequenceFlow id="SequenceFlow_1jbg3y8" name="通过" sourceRef="exclusivegateway14" targetRef="usr_riskSndCheck">
+            <conditionExpression xsi:type="tFormalExpression">${rtfState=='通过'}</conditionExpression>
+        </sequenceFlow>
+        <sequenceFlow id="SequenceFlow_0viwh84" name="通过" sourceRef="ExclusiveGateway_0lqv2ej" targetRef="usr_materialcheck">
+            <conditionExpression xsi:type="tFormalExpression">${rtfState=='通过'}</conditionExpression>
+        </sequenceFlow>
+        <sequenceFlow id="SequenceFlow_1onwsc8" sourceRef="usr_materialcheck" targetRef="exclusivegateway10" />
+        <sequenceFlow id="SequenceFlow_083oevm" name="退回风控初审" sourceRef="exclusivegateway3" targetRef="usr_riskFstCheck">
+            <conditionExpression xsi:type="tFormalExpression">${rtfState=='退回风控初审'}</conditionExpression>
+        </sequenceFlow>
+        <sequenceFlow id="SequenceFlow_1nyq1gs" name="通过" sourceRef="exclusivegateway3" targetRef="endevent1">
+            <conditionExpression xsi:type="tFormalExpression">${rtfState=='通过'}</conditionExpression>
+        </sequenceFlow>
+        <userTask id="usr_materialinput" name="整理资料" activiti:formKey="welcome.infocollect">
+            <extensionElements>
+                <activiti:applyStatus value="资料整理" />
+                <activiti:assignToOrigin value="true" />
+                <activiti:autoClaimer value="${dubboListener_asdas_sada}" />
+                <activiti:role value="ORGRG1_ROLE000" />
+                <activiti:role value="RS365" />
+            </extensionElements>
+            <incoming>SequenceFlow_15devhf</incoming>
+            <incoming>SequenceFlow_0ogeb9a</incoming>
+            <incoming>SequenceFlow_16f3rgy</incoming>
+            <incoming>SequenceFlow_1lp7v72</incoming>
+            <incoming>SequenceFlow_1i5kv75</incoming>
+            <outgoing>SequenceFlow_155j9sy</outgoing>
+        </userTask>
+        <sequenceFlow id="SequenceFlow_155j9sy" sourceRef="usr_materialinput" targetRef="ExclusiveGateway_0lqv2ej" />
+        <exclusiveGateway id="ExclusiveGateway_0lqv2ej">
+            <incoming>SequenceFlow_155j9sy</incoming>
+            <outgoing>SequenceFlow_19x1wrc</outgoing>
+            <outgoing>SequenceFlow_02orzvm</outgoing>
+            <outgoing>SequenceFlow_1i3636g</outgoing>
+            <outgoing>SequenceFlow_1lp7v72</outgoing>
+            <outgoing>SequenceFlow_0viwh84</outgoing>
+        </exclusiveGateway>
+        <sequenceFlow id="SequenceFlow_1i5kv75" sourceRef="startevent1" targetRef="usr_materialinput" />
+    </process>
+    <bpmndi:BPMNDiagram id="BPMNDiagram_ams-astAudit">
+        <bpmndi:BPMNPlane id="BPMNPlane_ams-astAudit" bpmnElement="ams-astAudit">
+            <bpmndi:BPMNShape id="BPMNShape_usr_riskFstCheck" bpmnElement="usr_riskFstCheck">
+                <omgdc:Bounds x="365" y="458" width="105" height="55" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="BPMNShape_usr_riskSndCheck" bpmnElement="usr_riskSndCheck">
+                <omgdc:Bounds x="365" y="582" width="105" height="55" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="BPMNShape_exclusivegateway3" bpmnElement="exclusivegateway3" isMarkerVisible="true">
+                <omgdc:Bounds x="100" y="590" width="40" height="40" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="BPMNShape_startevent1" bpmnElement="startevent1">
+                <omgdc:Bounds x="400" y="32" width="35" height="35" />
+                <bpmndi:BPMNLabel>
+                    <omgdc:Bounds x="405" y="8" width="25" height="14" />
+                </bpmndi:BPMNLabel>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="BPMNShape_usr_materialcheck" bpmnElement="usr_materialcheck">
+                <omgdc:Bounds x="365" y="326" width="105" height="55" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="BPMNShape_exclusivegateway10" bpmnElement="exclusivegateway10" isMarkerVisible="true">
+                <omgdc:Bounds x="210" y="334" width="40" height="40" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="BPMNShape_endevent1" bpmnElement="endevent1">
+                <omgdc:Bounds x="102" y="710" width="35" height="35" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="BPMNShape_exclusivegateway14" bpmnElement="exclusivegateway14" isMarkerVisible="true">
+                <omgdc:Bounds x="640" y="466" width="40" height="40" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="BPMNShape_endevent2" bpmnElement="endevent2">
+                <omgdc:Bounds x="712" y="222" width="35" height="35" />
+                <bpmndi:BPMNLabel>
+                    <omgdc:Bounds x="720" y="198" width="20" height="14" />
+                </bpmndi:BPMNLabel>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="BPMNShape_endevent3" bpmnElement="endevent3">
+                <omgdc:Bounds x="52" y="336" width="35" height="35" />
+                <bpmndi:BPMNLabel>
+                    <omgdc:Bounds x="60" y="312" width="20" height="14" />
+                </bpmndi:BPMNLabel>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNEdge id="SequenceFlow_1lp7v72_di" bpmnElement="SequenceFlow_1lp7v72">
+                <omgdi:waypoint x="560" y="215" />
+                <omgdi:waypoint x="560" y="190" />
+                <omgdi:waypoint x="490" y="190" />
+                <omgdi:waypoint x="467" y="205" />
+                <bpmndi:BPMNLabel>
+                    <omgdc:Bounds x="508" y="188" width="44" height="14" />
+                </bpmndi:BPMNLabel>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="SequenceFlow_16f3rgy_di" bpmnElement="SequenceFlow_16f3rgy">
+                <omgdi:waypoint x="660" y="466" />
+                <omgdi:waypoint x="660" y="150" />
+                <omgdi:waypoint x="490" y="150" />
+                <omgdi:waypoint x="436" y="200" />
+                <bpmndi:BPMNLabel>
+                    <omgdc:Bounds x="528" y="144" width="67" height="14" />
+                </bpmndi:BPMNLabel>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="SequenceFlow_1i3636g_di" bpmnElement="SequenceFlow_1i3636g">
+                <omgdi:waypoint x="585" y="240" />
+                <omgdi:waypoint x="712" y="240" />
+                <bpmndi:BPMNLabel>
+                    <omgdc:Bounds x="628" y="223" width="23" height="14" />
+                </bpmndi:BPMNLabel>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="SequenceFlow_15devhf_di" bpmnElement="SequenceFlow_15devhf">
+                <omgdi:waypoint x="230" y="334" />
+                <omgdi:waypoint x="230" y="160" />
+                <omgdi:waypoint x="360" y="160" />
+                <omgdi:waypoint x="383" y="200" />
+                <bpmndi:BPMNLabel>
+                    <omgdc:Bounds x="265" y="160" width="67" height="14" />
+                </bpmndi:BPMNLabel>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="SequenceFlow_0ogeb9a_di" bpmnElement="SequenceFlow_0ogeb9a">
+                <omgdi:waypoint x="120" y="590" />
+                <omgdi:waypoint x="120" y="240" />
+                <omgdi:waypoint x="368" y="240" />
+                <bpmndi:BPMNLabel>
+                    <omgdc:Bounds x="167" y="221" width="67" height="14" />
+                </bpmndi:BPMNLabel>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="SequenceFlow_08xmeqw_di" bpmnElement="SequenceFlow_08xmeqw">
+                <omgdi:waypoint x="120" y="590" />
+                <omgdi:waypoint x="120" y="290" />
+                <omgdi:waypoint x="280" y="290" />
+                <omgdi:waypoint x="365" y="338" />
+                <bpmndi:BPMNLabel>
+                    <omgdc:Bounds x="167" y="272" width="67" height="14" />
+                </bpmndi:BPMNLabel>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="SequenceFlow_089v1u9_di" bpmnElement="SequenceFlow_089v1u9">
+                <omgdi:waypoint x="210" y="354" />
+                <omgdi:waypoint x="87" y="354" />
+                <bpmndi:BPMNLabel>
+                    <omgdc:Bounds x="138" y="347" width="23" height="14" />
+                </bpmndi:BPMNLabel>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="SequenceFlow_0lvrz5s_di" bpmnElement="SequenceFlow_0lvrz5s">
+                <omgdi:waypoint x="230" y="374" />
+                <omgdi:waypoint x="230" y="450" />
+                <omgdi:waypoint x="365" y="484" />
+                <bpmndi:BPMNLabel>
+                    <omgdc:Bounds x="234" y="409" width="23" height="14" />
+                </bpmndi:BPMNLabel>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="SequenceFlow_0uq1ci2_di" bpmnElement="SequenceFlow_0uq1ci2">
+                <omgdi:waypoint x="230" y="374" />
+                <omgdi:waypoint x="230" y="570" />
+                <omgdi:waypoint x="360" y="610" />
+                <bpmndi:BPMNLabel>
+                    <omgdc:Bounds x="212" y="469" width="66" height="14" />
+                </bpmndi:BPMNLabel>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="SequenceFlow_0ksons1_di" bpmnElement="SequenceFlow_0ksons1">
+                <omgdi:waypoint x="365" y="610" />
+                <omgdi:waypoint x="140" y="610" />
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="SequenceFlow_02orzvm_di" bpmnElement="SequenceFlow_02orzvm">
+                <omgdi:waypoint x="560" y="265" />
+                <omgdi:waypoint x="560" y="627" />
+                <omgdi:waypoint x="470" y="627" />
+                <bpmndi:BPMNLabel>
+                    <omgdc:Bounds x="572" y="367" width="66" height="14" />
+                </bpmndi:BPMNLabel>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="SequenceFlow_19x1wrc_di" bpmnElement="SequenceFlow_19x1wrc">
+                <omgdi:waypoint x="560" y="265" />
+                <omgdi:waypoint x="560" y="460" />
+                <omgdi:waypoint x="470" y="485" />
+                <bpmndi:BPMNLabel>
+                    <omgdc:Bounds x="518" y="344" width="66" height="14" />
+                </bpmndi:BPMNLabel>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="SequenceFlow_029p14t_di" bpmnElement="SequenceFlow_029p14t">
+                <omgdi:waypoint x="660" y="466" />
+                <omgdi:waypoint x="660" y="354" />
+                <omgdi:waypoint x="470" y="354" />
+                <bpmndi:BPMNLabel>
+                    <omgdc:Bounds x="642" y="408" width="67" height="14" />
+                </bpmndi:BPMNLabel>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="SequenceFlow_0gqvzh8_di" bpmnElement="SequenceFlow_0gqvzh8">
+                <omgdi:waypoint x="470" y="486" />
+                <omgdi:waypoint x="640" y="486" />
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="SequenceFlow_1jbg3y8_di" bpmnElement="SequenceFlow_1jbg3y8">
+                <omgdi:waypoint x="660" y="506" />
+                <omgdi:waypoint x="660" y="610" />
+                <omgdi:waypoint x="470" y="610" />
+                <bpmndi:BPMNLabel>
+                    <omgdc:Bounds x="664" y="555" width="23" height="14" />
+                </bpmndi:BPMNLabel>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="SequenceFlow_0viwh84_di" bpmnElement="SequenceFlow_0viwh84">
+                <omgdi:waypoint x="560" y="265" />
+                <omgdi:waypoint x="560" y="320" />
+                <omgdi:waypoint x="470" y="342" />
+                <bpmndi:BPMNLabel>
+                    <omgdc:Bounds x="552" y="278" width="23" height="14" />
+                </bpmndi:BPMNLabel>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="SequenceFlow_1onwsc8_di" bpmnElement="SequenceFlow_1onwsc8">
+                <omgdi:waypoint x="365" y="354" />
+                <omgdi:waypoint x="250" y="354" />
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="SequenceFlow_083oevm_di" bpmnElement="SequenceFlow_083oevm">
+                <omgdi:waypoint x="124" y="594" />
+                <omgdi:waypoint x="150" y="486" />
+                <omgdi:waypoint x="365" y="486" />
+                <bpmndi:BPMNLabel>
+                    <omgdc:Bounds x="104" y="522" width="66" height="14" />
+                </bpmndi:BPMNLabel>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="SequenceFlow_1nyq1gs_di" bpmnElement="SequenceFlow_1nyq1gs">
+                <omgdi:waypoint x="120" y="630" />
+                <omgdi:waypoint x="120" y="710" />
+                <bpmndi:BPMNLabel>
+                    <omgdc:Bounds x="124" y="667" width="23" height="14" />
+                </bpmndi:BPMNLabel>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNShape id="UserTask_1qh7cxs_di" bpmnElement="usr_materialinput">
+                <omgdc:Bounds x="368" y="200" width="100" height="80" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNEdge id="SequenceFlow_155j9sy_di" bpmnElement="SequenceFlow_155j9sy">
+                <omgdi:waypoint x="468" y="240" />
+                <omgdi:waypoint x="535" y="240" />
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNShape id="ExclusiveGateway_0lqv2ej_di" bpmnElement="ExclusiveGateway_0lqv2ej" isMarkerVisible="true">
+                <omgdc:Bounds x="535" y="215" width="50" height="50" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNEdge id="SequenceFlow_1i5kv75_di" bpmnElement="SequenceFlow_1i5kv75">
+                <omgdi:waypoint x="418" y="67" />
+                <omgdi:waypoint x="418" y="200" />
+            </bpmndi:BPMNEdge>
+        </bpmndi:BPMNPlane>
+    </bpmndi:BPMNDiagram>
+</definitions>
