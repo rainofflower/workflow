@@ -1,5 +1,6 @@
 package com.rainofflower.learn.workflow;
 
+import com.rainofflower.learn.workflow.constant.WorkFlowConstants;
 import org.activiti.engine.DynamicBpmnService;
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.ProcessEngineConfiguration;
@@ -228,21 +229,25 @@ public class First {
 		DynamicBpmnService dynamicBpmnService = engine.getDynamicBpmnService();
 
 		// 部署流程文件
-		/*repositoryService.createDeployment()
-				.addClasspathResource("processes/dynamicCallActivity.bpmn")
+		repositoryService.createDeployment()
+				.addClasspathResource("processes/callActSimple.bpmn")
 				.addClasspathResource("processes/sub1.bpmn")
-				.addClasspathResource("processes/sub2.bpmn")
-				.addClasspathResource("processes/defaultSub.bpmn")
+//				.addClasspathResource("processes/sub2.bpmn")
+//				.addClasspathResource("processes/defaultSub.bpmn")
 				.deploy();
+
 		String businessKey = "20210409";
+		/*ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("sub1", businessKey);*/
+
 		Map<String, Object> initVars = new HashMap<>();
 		initVars.put(WorkFlowConstants.BUSINESS_KEY, businessKey);
-		ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("dynamicCallActivityTest", businessKey, initVars);
+		initVars.put("targetSubProcess","sub1");
+		ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("callActSimple", businessKey, initVars);
 		Task task = taskService.createTaskQuery().processInstanceId(processInstance.getId()).singleResult();
 		System.out.println("流程节点："+task.getName());
-		Map<String, Object> vars = new HashMap<>();
-		vars.put("targetSubProcess","sub1");
-		taskService.complete(task.getId(),vars);*/
+//		Map<String, Object> vars = new HashMap<>();
+//		vars.put("targetSubProcess","sub1");
+//		taskService.complete(task.getId(),vars);
 //		taskService.complete(task.getId());
 	}
 }
