@@ -3,17 +3,17 @@
   <process id="callActSimple" name="My process" isExecutable="true" isClosed="false" processType="None">
     <startEvent id="startevent1" name="Start"></startEvent>
     <endEvent id="endevent1" name="End"></endEvent>
-    <callActivity id="callactivity1" name="Call activity" calledElement="${targetSubProcess}">
+    <callActivity id="callactivity1" name="Call activity" activiti:async="true" calledElement="${targetSubProcess}">
       <extensionElements>
         <activiti:out source="state" target="state"></activiti:out>
       </extensionElements>
     </callActivity>
-    <serviceTask id="servicetask1" name="Service Task" activiti:delegateExpression="${serviceTask1}">
-    	<extensionElements>
-      	<activiti:param1 value="hahahahh哈哈哈" />
+    <serviceTask id="servicetask1" name="Service Task" activiti:async="true" activiti:delegateExpression="${serviceTask1}">
+      <extensionElements>
+        <activiti:param1 value="hahahahh哈哈哈"></activiti:param1>
       </extensionElements>
     </serviceTask>
-    <serviceTask id="servicetask2" name="Service Task" activiti:delegateExpression="${serviceTask2}"></serviceTask>
+    <serviceTask id="servicetask2" name="Service Task" activiti:async="true" activiti:delegateExpression="${serviceTask2}"></serviceTask>
     <sequenceFlow id="flow1" sourceRef="startevent1" targetRef="servicetask1"></sequenceFlow>
     <sequenceFlow id="flow2" sourceRef="servicetask1" targetRef="callactivity1"></sequenceFlow>
     <sequenceFlow id="flow3" sourceRef="callactivity1" targetRef="servicetask2"></sequenceFlow>
